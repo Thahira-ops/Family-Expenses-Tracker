@@ -4,35 +4,38 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Family Expense Tracker</title>
- <link rel="stylesheet" href="style.css?v=3">
-
-
+  <link rel="stylesheet" href="style.css?v=100" />
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#3f51b5" />
-  <link rel="icon" href="icons/icon-192.png" type="image/png" />
+  <link rel="icon" href="icon-192.png" type="image/png" />
 </head>
 <body>
   <div class="container">
     <h1>👨‍👩‍👧‍👦 Family Expense Tracker</h1>
 
-    <!-- Monthly Income -->
+    <!-- Income Form -->
     <form id="income-form">
       <input type="number" id="income" placeholder="Enter Monthly Income ₹" required />
       <button type="submit">💰 Set Income</button>
     </form>
 
-    <!-- Add Expense -->
+    <!-- Expense Form -->
     <form id="expense-form">
       <input type="text" id="member" placeholder="Family Member" required />
       <input type="number" id="amount" placeholder="Amount" required />
+
       <select id="category" required>
         <option value="">Select Category</option>
         <option value="Food">🍲 Food</option>
         <option value="Rent">🏠 Rent</option>
         <option value="Travel">🚌 Travel</option>
         <option value="Utilities">💡 Utilities</option>
-        <option value="Education">📚 Education</option>
+        <option value="Other">✏️ Other</option>
       </select>
+
+      <!-- Hidden input shown when 'Other' is selected -->
+      <input type="text" id="custom-category" placeholder="Enter custom category" style="display:none;" />
+
       <button type="submit">➕ Add Expense</button>
     </form>
 
@@ -53,7 +56,7 @@
       <option value="11">December</option>
     </select>
 
-    <!-- Dashboard Summary -->
+    <!-- Summary Display -->
     <div id="summary">
       <p><strong>Income:</strong> ₹<span id="income-display">0</span></p>
       <p><strong>Total Expenses:</strong> ₹<span id="total-expenses">0</span></p>
@@ -63,20 +66,21 @@
     <!-- Expense List -->
     <div id="expense-list"></div>
 
-    <!-- Share Buttons -->
+    <!-- Action Buttons -->
     <div class="button-group">
       <button id="export-pdf-btn" class="share-btn">📄 Export PDF</button>
       <button id="whatsapp-btn" class="share-btn">📤 Share on WhatsApp</button>
     </div>
   </div>
 
+  <!-- Footer -->
   <footer style="text-align: center; margin-top: 30px; font-size: 14px;">
     © 2025 Family Expense Tracker. All rights reserved.
   </footer>
 
-  <!-- External Libraries -->
+  <!-- Scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
- <script src="script.js?v=3"></script>
+  <script src="script.js?v=100"></script>
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('service-worker.js')
