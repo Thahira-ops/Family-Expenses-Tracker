@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Family Expense Tracker</title>
+ <link rel="stylesheet" href="style.css?v=3">
+
+
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#3f51b5" />
+  <link rel="icon" href="icons/icon-192.png" type="image/png" />
+</head>
+<body>
+  <div class="container">
+    <h1>👨‍👩‍👧‍👦 Family Expense Tracker</h1>
+
+    <!-- Monthly Income -->
+    <form id="income-form">
+      <input type="number" id="income" placeholder="Enter Monthly Income ₹" required />
+      <button type="submit">💰 Set Income</button>
+    </form>
+
+    <!-- Add Expense -->
+    <form id="expense-form">
+      <input type="text" id="member" placeholder="Family Member" required />
+      <input type="number" id="amount" placeholder="Amount" required />
+      <select id="category" required>
+        <option value="">Select Category</option>
+        <option value="Food">🍲 Food</option>
+        <option value="Rent">🏠 Rent</option>
+        <option value="Travel">🚌 Travel</option>
+        <option value="Utilities">💡 Utilities</option>
+        <option value="Education">📚 Education</option>
+      </select>
+      <button type="submit">➕ Add Expense</button>
+    </form>
+
+    <!-- Month Filter -->
+    <select id="month-filter">
+      <option value="all">All Months</option>
+      <option value="0">January</option>
+      <option value="1">February</option>
+      <option value="2">March</option>
+      <option value="3">April</option>
+      <option value="4">May</option>
+      <option value="5">June</option>
+      <option value="6">July</option>
+      <option value="7">August</option>
+      <option value="8">September</option>
+      <option value="9">October</option>
+      <option value="10">November</option>
+      <option value="11">December</option>
+    </select>
+
+    <!-- Dashboard Summary -->
+    <div id="summary">
+      <p><strong>Income:</strong> ₹<span id="income-display">0</span></p>
+      <p><strong>Total Expenses:</strong> ₹<span id="total-expenses">0</span></p>
+      <p><strong>Savings:</strong> ₹<span id="savings">0</span></p>
+    </div>
+
+    <!-- Expense List -->
+    <div id="expense-list"></div>
+
+    <!-- Share Buttons -->
+    <div class="button-group">
+      <button id="export-pdf-btn" class="share-btn">📄 Export PDF</button>
+      <button id="whatsapp-btn" class="share-btn">📤 Share on WhatsApp</button>
+    </div>
+  </div>
+
+  <footer style="text-align: center; margin-top: 30px; font-size: 14px;">
+    © 2025 Family Expense Tracker. All rights reserved.
+  </footer>
+
+  <!-- External Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+ <script src="script.js?v=3"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(() => console.log("✅ Service Worker Registered"))
+        .catch(err => console.error("❌ Service Worker Error:", err));
+    }
+  </script>
+</body>
+</html>
