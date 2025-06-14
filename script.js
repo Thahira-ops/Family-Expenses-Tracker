@@ -1,9 +1,12 @@
+
 let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
 let income = parseFloat(localStorage.getItem('income')) || 0;
 
+// Display initial income
 document.getElementById('income-display').textContent = income;
 updateSummary();
 
+// Income form handler
 document.getElementById('income-form').addEventListener('submit', function (e) {
   e.preventDefault();
   income = parseFloat(document.getElementById('income').value);
@@ -13,21 +16,40 @@ document.getElementById('income-form').addEventListener('submit', function (e) {
   this.reset();
 });
 
+// Category "Other" toggle logic
+const categorySelect = document.getElementById('category');
+const customCategoryInput = document.getElementById('custom-category');
+
+categorySelect.addEventListener('change', () => {
+  if (categorySelect.value === 'Other') {
+    customCategoryInput.style.display = 'block';
+    customCategoryInput.required = true;
+  } else {
+    customCategoryInput.style.display = 'none';
+    customCategoryInput.required = false;
+    customCategoryInput.value = '';
+  }
+});
+
+// Expense form handler (Single, correct version)
 document.getElementById('expense-form').addEventListener('submit', function (e) {
   e.preventDefault();
   const member = document.getElementById('member').value;
   const amount = parseFloat(document.getElementById('amount').value);
-  const category = document.getElementById('category').value;
+  const selectedCategory = categorySelect.value === 'Other' ? customCategoryInput.value : categorySelect.value;
   const date = new Date().toISOString();
 
-  const expense = { member, amount, category, date };
+  const expense = { member, amount, category: selectedCategory, date };
   expenses.push(expense);
   localStorage.setItem('expenses', JSON.stringify(expenses));
+
   displayExpenses(expenses);
   updateSummary();
   this.reset();
+  customCategoryInput.style.display = 'none'; // Hide custom input after submit
 });
 
+// Display expenses
 function displayExpenses(data) {
   const list = document.getElementById('expense-list');
   list.innerHTML = '';
@@ -38,6 +60,7 @@ function displayExpenses(data) {
   });
 }
 
+// Update summary (total + savings)
 function updateSummary() {
   const total = expenses.reduce((sum, e) => sum + e.amount, 0);
   const savings = income - total;
@@ -45,14 +68,11 @@ function updateSummary() {
   document.getElementById('savings').textContent = savings.toFixed(2);
 }
 
-displayExpenses(expenses);
-
-// Filter by month
+// Month filter
 document.getElementById('month-filter').addEventListener('change', function () {
   const val = this.value;
-  const filtered = val === 'all'
-    ? expenses
-    : expenses.filter(e => new Date(e.date).getMonth().toString() === val);
+  const filtered = val === 'all' ? expenses :
+    expenses.filter(e => new Date(e.date).getMonth().toString() === val);
   displayExpenses(filtered);
 });
 
@@ -61,17 +81,15 @@ document.getElementById('export-pdf-btn').addEventListener('click', () => {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
   doc.text("Family Expense Report", 10, 10);
-
   let y = 20;
   expenses.forEach(e => {
     doc.text(`${e.member}: ₹${e.amount} (${e.category}) on ${new Date(e.date).toLocaleDateString()}`, 10, y);
     y += 10;
   });
-
   doc.save("family-expense-report.pdf");
 });
 
-// WhatsApp Share
+// Share via WhatsApp
 document.getElementById('whatsapp-btn').addEventListener('click', () => {
   const total = expenses.reduce((sum, e) => sum + e.amount, 0);
   const savings = income - total;
@@ -80,7 +98,7 @@ document.getElementById('whatsapp-btn').addEventListener('click', () => {
   window.open(url, "_blank");
 });
 
-// Auto delete after 3 months
+// Remove data older than 3 months
 expenses = expenses.filter(exp => {
   const now = new Date();
   const expDate = new Date(exp.date);
@@ -88,3 +106,5 @@ expenses = expenses.filter(exp => {
   return monthsDiff < 3;
 });
 localStorage.setItem('expenses', JSON.stringify(expenses));
+displayExpenses(expenses);
+
